@@ -37,7 +37,9 @@ def planet_ephem(bot, update):
         result = ephem.Jupiter(today)
 
     constellation = ephem.constellation(result)
-    update.message.reply_text(constellation)
+    full_const = constellation[1]
+    reply_const = 'Планета {} находится в созвездии {}'.format(user_planet, full_const)
+    update.message.reply_text(reply_const)
 
 def main():
     mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)

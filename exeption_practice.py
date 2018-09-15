@@ -27,6 +27,5 @@ def ask_user():
     
     except KeyboardInterrupt:
         print(" Ну ладно, пока.")
-        break
-
+        
 ask_user()
