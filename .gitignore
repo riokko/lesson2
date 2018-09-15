@@ -2,3 +2,5 @@ theory_operator_if.py
 theory_cycle_for.py
 theory_cycle_while.py
 try_again.py
+theory_exeption.py
+theory_modules_PIP.py

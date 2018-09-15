@@ -28,4 +28,6 @@ def ask_user():
         else:
             print("Не понимаю. Давай попробуем снова?")
 
-ask_user()
+
+if __name__ == "__main__":
+    ask_user()
