@@ -41,6 +41,19 @@ def planet_ephem(bot, update):
     reply_const = 'Планета {} находится в созвездии {}'.format(user_planet, full_const)
     update.message.reply_text(reply_const)
 
+def wordcount(bot, update):
+    user_phrase = update.message.text
+    if user_phrase.strip():
+        user_phrase = user_phrase.split(" ")
+        user_phrase = user_phrase[1:]
+        count_words = len(user_phrase)
+
+        reply_wordcount = 'В вашей фразе {} слов(а).'.format(count_words)
+
+    else:
+        reply_wordcount = "Почему ничего нет?"
+    update.message.reply_text(reply_wordcount)
+
 def main():
     mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)
     
@@ -50,6 +63,7 @@ def main():
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("planet", planet_ephem))
+    dp.add_handler(CommandHandler("wordcount", wordcount))
 
     mybot.start_polling()
     mybot.idle()
