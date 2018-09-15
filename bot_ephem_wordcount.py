@@ -38,11 +38,14 @@ def planet_ephem(bot, update):
 
     constellation = ephem.constellation(result)
     full_const = constellation[1]
-    reply_const = 'Планета {} находится в созвездии {}'.format(user_planet, full_const)
+    reply_const = 'Планета {} сегодня находится в созвездии {}'.format(user_planet, full_const)
     update.message.reply_text(reply_const)
 
 def wordcount(bot, update):
+    symbols = ["-", "=", "_", "\"", "?", "!", "."]
     user_phrase = update.message.text
+    for symbol in symbols:
+        user_phrase = user_phrase.replace(symbol,"")
     user_phrase = user_phrase.strip().split(" ")
     user_phrase = user_phrase[1:]
 
