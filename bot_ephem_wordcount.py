@@ -15,7 +15,6 @@ def greet_user(bot, update):
     logging.info(text)
     update.message.reply_text(text)
 
-
 def talk_to_me(bot, update):
     user_text = 'Привет, {}! Ты написал «{}»'.format(update.message.chat.first_name, update.message.text)
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username, 
@@ -38,7 +37,7 @@ def planet_ephem(bot, update):
 
     constellation = ephem.constellation(result)
     full_const = constellation[1]
-    reply_const = 'Планета {} сегодня находится в созвездии {}'.format(user_planet, full_const)
+    reply_const = "Планета {} сегодня находится в созвездии {}".format(user_planet, full_const)
     update.message.reply_text(reply_const)
 
 def wordcount(bot, update):
@@ -56,12 +55,40 @@ def wordcount(bot, update):
         if count_words > 1 < 4:
             reply_wordcount = "В вашей фразе {} слова.".format(count_words)
         if count_words >= 5: 
-            reply_wordcount = 'В вашей фразе {} слов.'.format(count_words)
+            reply_wordcount = "В вашей фразе {} слов.".format(count_words)
 
     else:
         reply_wordcount = "Почему ничего нет?"
     
     update.message.reply_text(reply_wordcount)
+
+def start_calc(bot,update):
+    expression = update.message.text
+    if expression[-1] == "=":
+        calculate(bot,update)
+    else:
+        return talk_to_me(bot,update)
+
+def calculate(bot,update):
+    user_phrase = update.message.text
+    user_phrase = user_phrase.replace("=","")
+
+    if "+" in user_phrase:
+        user_phrase = user_phrase.split("+")
+        calculation = float(user_phrase[0]) + float(user_phrase[1])
+
+    if "-" in user_phrase:
+        user_phrase = user_phrase.split("-")
+        calculation = float(user_phrase[0]) - float(user_phrase[1])
+
+    if "/" in user_phrase:
+        user_phrase = user_phrase.split("/")
+        calculation = round(float(user_phrase[0]) / float(user_phrase[1]), 2)
+
+    if "*" in user_phrase:
+        calculation = float(user_phrase[0]) * float(user_phrase[1])
+
+    update.message.reply_text(calculation)
 
 def main():
     mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)
@@ -70,9 +97,11 @@ def main():
 
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
-    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+    dp.add_handler(MessageHandler(Filters.text, start_calc))
+#    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("planet", planet_ephem))
     dp.add_handler(CommandHandler("wordcount", wordcount))
+
 
     mybot.start_polling()
     mybot.idle()
